@@ -5,12 +5,14 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>归档: 2022</title>
+    <title>注解@Transaction需要注意点 - 红烧鲈鱼</title>
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="google" content="notranslate" />
     <meta name="keywords" content="Fechin,"> 
-    
+    <meta name="description" content="
+不要在接口上声明@Transactional, 而要在具体的方法上使用@Transactional
+@Transactional放在类级声明中, 会导致下面的所有方法都有事务, 不需要事务的地方不,"> 
     <meta name="author" content="fallsown"> 
     <link rel="alternative" href="atom.xml" title="红烧鲈鱼" type="application/atom+xml"> 
     <link rel="icon" href="/img/favicon.png"> 
@@ -18,16 +20,20 @@
     
     
     <meta name="twitter:card" content="summary"/>
-    <meta name="twitter:title" content="归档: 2022"/>
-    
+    <meta name="twitter:title" content="注解@Transaction需要注意点 - 红烧鲈鱼"/>
+    <meta name="twitter:description" content="
+不要在接口上声明@Transactional, 而要在具体的方法上使用@Transactional
+@Transactional放在类级声明中, 会导致下面的所有方法都有事务, 不需要事务的地方不,"/>
     
     
     
     
     <meta property="og:site_name" content="红烧鲈鱼"/>
     <meta property="og:type" content="object"/>
-    <meta property="og:title" content="归档: 2022"/>
-    
+    <meta property="og:title" content="注解@Transaction需要注意点 - 红烧鲈鱼"/>
+    <meta property="og:description" content="
+不要在接口上声明@Transactional, 而要在具体的方法上使用@Transactional
+@Transactional放在类级声明中, 会导致下面的所有方法都有事务, 不需要事务的地方不,"/>
     
 <link rel="stylesheet" href="/css/diaspora.css">
 
@@ -36,63 +42,88 @@
 <body class="loading">
     <span id="config-title" style="display:none">红烧鲈鱼</span>
     <div id="loader"></div>
-    <div id="single" class="page">
-    <div id="top">
-        <a class="iconfont icon-left image-icon" href="javascript:history.back()"></a>
-    </div>
-    <div class="section">
-        <div class="article">
-            <div class="main">
-                <div class="content">
-                    <div class="timeline">
-                      <h2 class="timeline-title">归档: 6篇</h2><hr>
-                      
-                      
-                        
-                          <h3 class="timeline-subtitle">2022</h3>
-                        
-                        <div class="timeline-item">
-                          <time>2022-03-15</time>
-                          <a target="_self" href="/2022/03/15/%E6%B3%A8%E8%A7%A3@Transactional%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E7%9A%84%E7%82%B9/">注解@Transaction需要注意点</a>
-                        </div>
-                      
-                        
-                        <div class="timeline-item">
-                          <time>2022-03-14</time>
-                          <a target="_self" href="/2022/03/14/%E7%BA%BF%E7%A8%8B%E6%B1%A0%20%E8%B0%83%E7%94%A8%20%E4%B8%8D%E7%94%9F%E6%95%88/">线程池调用不生效</a>
-                        </div>
-                      
-                        
-                        <div class="timeline-item">
-                          <time>2022-03-14</time>
-                          <a target="_self" href="/2022/03/14/Https%E5%90%84%E7%8A%B6%E6%80%81%E7%A0%81/">Https各状态码</a>
-                        </div>
-                      
-                        
-                        <div class="timeline-item">
-                          <time>2022-03-08</time>
-                          <a target="_self" href="/2022/03/08/github%E6%90%9C%E7%B4%A2%E8%AF%AD%E6%B3%95/">github搜索语法</a>
-                        </div>
-                      
-                        
-                        <div class="timeline-item">
-                          <time>2022-03-08</time>
-                          <a target="_self" href="/2022/03/08/leetcode-15-%E4%B8%89%E6%95%B0%E4%B9%8B%E5%92%8C/">leetcode_15_三数之和</a>
-                        </div>
-                      
-                        
-                        <div class="timeline-item">
-                          <time>2022-03-06</time>
-                          <a target="_self" href="/2022/03/06/java_%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/">java动态代理</a>
-                        </div>
-                      
-                    </div>
-                </div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="https://fallsown.github.io"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">注解@Transaction需要注意点</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
             </div>
+            <div id="qr"></div>
         </div>
     </div>
+    <div class="scrollbar"></div>
 </div>
 
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">注解@Transaction需要注意点</h1>
+        <div class="stuff">
+            <span>三月 15, 2022</span>
+            
+
+        </div>
+        <div class="content markdown">
+            <ol>
+<li>不要在接口上声明@Transactional, 而要在具体的方法上使用@Transactional</li>
+<li>@Transactional放在类级声明中, 会导致下面的所有方法都有事务, 不需要事务的地方不要放置事务, 对性能会有影响</li>
+<li><font color="red">使用了@Transactional方法的, 对同一个类里面的方法调用了, @Transactional无效. 比如A调用本类的B, A没有事务, B添加了事务, 则B的事务会无效</font></li>
+<li>使用了@Transactional的方法, 只能是public的, @Transactional注解的方法都是被外部其他类调用才有效, 因此只能是public. 因此在protected, private, 或者在package-visible的方法上使用@Transactional注解, 它不会报错, 但是事务无效</li>
+<li>经过ICORE-CLAIM测试下, 效果如下<ol>
+<li>抛出受检查异常XXXException, 事务会回滚</li>
+<li>抛出运行时异常NullPointerException, 事务会回滚</li>
+<li>Quartz中, execute直接调用了@Transactional方法, 可以回滚, 简介调用, 不会回滚</li>
+<li>异步任务中, execute直接调用加了@Transactional方法可以回滚, 简介调用不会回滚</li>
+<li>在action中加入@Transaction, 不会回滚, 切记不要在action中加上事务</li>
+<li>在service加上@Transaction注解, 如果是action直接调用该方法会回滚, 如果是简介调用, 不会回滚</li>
+<li>在service中的private加上@Transactional, 事务不会回滚</li>
+</ol>
+</li>
+</ol>
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
 </body>
 
 
