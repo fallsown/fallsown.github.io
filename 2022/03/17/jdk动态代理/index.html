@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" class="loading">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>jdk动态代理 - 红烧鲈鱼</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="google" content="notranslate" />
+    <meta name="keywords" content="Fechin,"> 
+    <meta name="description" content="JDK动态代理, 代理类实例在程序运行时, 由JVM根据反射机制动态生成, 也就是说代理类不是用户自己定义的, 而是由JVM生成的
+1. JDK动态代理核心类JDK动态代理有两大核心类, 他们都在J,"> 
+    <meta name="author" content="fallsown"> 
+    <link rel="alternative" href="atom.xml" title="红烧鲈鱼" type="application/atom+xml"> 
+    <link rel="icon" href="/img/favicon.png"> 
+    
+    
+    
+    <meta name="twitter:card" content="summary"/>
+    <meta name="twitter:title" content="jdk动态代理 - 红烧鲈鱼"/>
+    <meta name="twitter:description" content="JDK动态代理, 代理类实例在程序运行时, 由JVM根据反射机制动态生成, 也就是说代理类不是用户自己定义的, 而是由JVM生成的
+1. JDK动态代理核心类JDK动态代理有两大核心类, 他们都在J,"/>
+    
+    
+    
+    
+    <meta property="og:site_name" content="红烧鲈鱼"/>
+    <meta property="og:type" content="object"/>
+    <meta property="og:title" content="jdk动态代理 - 红烧鲈鱼"/>
+    <meta property="og:description" content="JDK动态代理, 代理类实例在程序运行时, 由JVM根据反射机制动态生成, 也就是说代理类不是用户自己定义的, 而是由JVM生成的
+1. JDK动态代理核心类JDK动态代理有两大核心类, 他们都在J,"/>
+    
+<link rel="stylesheet" href="/css/diaspora.css">
+
+<meta name="generator" content="Hexo 6.0.0"></head>
+
+<body class="loading">
+    <span id="config-title" style="display:none">红烧鲈鱼</span>
+    <div id="loader"></div>
+    <div id="single">
+    <div id="top" style="display: block;">
+    <div class="bar" style="width: 0;"></div>
+    <a class="iconfont icon-home image-icon" href="javascript:;" data-url="https://fallsown.github.io"></a>
+    <div title="播放/暂停" class="iconfont icon-play"></div>
+    <h3 class="subtitle">jdk动态代理</h3>
+    <div class="social">
+        <div>
+            <div class="share">
+                <a title="获取二维码" class="iconfont icon-scan" href="javascript:;"></a>
+            </div>
+            <div id="qr"></div>
+        </div>
+    </div>
+    <div class="scrollbar"></div>
+</div>
+
+    <div class="section">
+        <div class="article">
+    <div class='main'>
+        <h1 class="title">jdk动态代理</h1>
+        <div class="stuff">
+            <span>三月 17, 2022</span>
+            
+  <ul class="post-tags-list" itemprop="keywords"><li class="post-tags-list-item"><a class="post-tags-list-link" href="/tags/%E5%8A%A8%E6%80%81%E4%BB%A3%E7%90%86/" rel="tag">动态代理</a></li></ul>
+
+
+        </div>
+        <div class="content markdown">
+            <p>JDK动态代理, 代理类实例在程序运行时, 由JVM根据<code>反射机制</code>动态生成, 也就是说代理类不是用户自己定义的, <strong>而是由JVM生成的</strong></p>
+<h1 id="1-JDK动态代理核心类"><a href="#1-JDK动态代理核心类" class="headerlink" title="1. JDK动态代理核心类"></a>1. JDK动态代理核心类</h1><p>JDK动态代理有两大核心类, 他们都在Java的反射包下(java.lang.reflect), 分别为<code>InvocationHandler</code>接口和<code>Proxy</code>类</p>
+<h2 id="1-1-InvocationHandler接口"><a href="#1-1-InvocationHandler接口" class="headerlink" title="1.1 InvocationHandler接口"></a>1.1 InvocationHandler接口</h2><blockquote>
+<p>代理实例的调用处理器需要实现<code>InvocationHandler</code>接口, 并且每个代理实例都有一个关联的调用处理器, 当一个方法在代理实例上被调用的时候, 这个方法调用将被编码并分派到其调用处理器的<code>invoke</code>方法上</p>
+</blockquote>
+<p>也就是我们每创建的一个代理实例, 都需要有一个关联的<code>InvocationHandler</code>, 并且在调用代理实例的方法, 会被转到<code>InvocationHandler</code>的<code>invoke</code>方法上</p>
+<p>该<code>invoke</code>方法作用是, 处理代理实例上的方法调用并返回结果</p>
+<p>其中有三个参数</p>
+<ul>
+<li>proxy: 是调用该方法的代理实例</li>
+<li>method: 是在代理实例上调用的接口方法对应的Method实例</li>
+<li>args: 一个Object数组, 是在代理实例上的方法调用中传递的参数值, 如果接口方法无参, 则改值为null</li>
+</ul>
+<p>返回值: 调用代理实例上的方法的返回值</p>
+<h2 id="1-2-Proxy类"><a href="#1-2-Proxy类" class="headerlink" title="1.2 Proxy类"></a>1.2 Proxy类</h2><blockquote>
+<p>Proxy类提供了创建动态代理类及其实例的静态方法, 该类也是动态代理类的超类</p>
+</blockquote>
+<p>代理类具有以下属性：</p>
+<ul>
+<li>代理类的名称以 “$Proxy” 开头，后面跟着一个数字序号。</li>
+<li>代理类继承了<code>Proxy</code>类。</li>
+<li>代理类实现了创建时指定的接口（JDK动态代理是面向接口的）。</li>
+<li>每个代理类都有一个公共构造函数，它接受一个参数，即接口<code>InvocationHandler</code>的实现，用于设置代理实例的调用处理器。</li>
+</ul>
+<p><code>Proxy</code>提供了两个静态方法, 用于获取代理对象</p>
+<h3 id="1-2-1-getProxyClass"><a href="#1-2-1-getProxyClass" class="headerlink" title="1.2.1 getProxyClass"></a>1.2.1 getProxyClass</h3><p>用于获取代理类的<code>Class</code>对象, 再通过调用构造函数创建代理实例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Class&lt;?&gt; getProxyClass(ClassLoader loader,</span><br><span class="line">                                         Class&lt;?&gt;... interfaces)</span><br><span class="line">        <span class="keyword">throws</span> IllegalArgumentException</span><br></pre></td></tr></table></figure>
+
+<p>有两个参数</p>
+<ul>
+<li>loader: 类加载器</li>
+<li>intefaces: 接口的<code>Class</code>对象数组</li>
+</ul>
+<p>返回值为动态代理类的<code>Class</code>对象</p>
+<h3 id="1-2-2-newProxyinstance"><a href="#1-2-2-newProxyinstance" class="headerlink" title="1.2.2 newProxyinstance"></a>1.2.2 newProxyinstance</h3><p>用于创建一个代理实例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Object <span class="title function_">newProxyInstance</span><span class="params">(ClassLoader loader,</span></span><br><span class="line"><span class="params">                                          Class&lt;?&gt;[] interfaces,</span></span><br><span class="line"><span class="params">                                          InvocationHandler h)</span></span><br><span class="line">        <span class="keyword">throws</span> IllegalArgumentException</span><br></pre></td></tr></table></figure>
+
+<p>改方法有三个参数</p>
+<ul>
+<li>loader: 为类加载器</li>
+<li>interfaces: 为接口的<code>Class</code>对象数组</li>
+<li>h: 指定的调用处理器</li>
+</ul>
+<p>返回值为指定接口的代理类的实例</p>
+<h2 id="1-3-小结"><a href="#1-3-小结" class="headerlink" title="1.3 小结"></a>1.3 小结</h2><p><code>Proxy</code>类主要用来获取动态代理对象, <code>InvocationHandler</code>接口主要用于方法调用的约束和增强</p>
+<h1 id="2-获取代理实例的代码实例"><a href="#2-获取代理实例的代码实例" class="headerlink" title="2. 获取代理实例的代码实例"></a>2. 获取代理实例的代码实例</h1><h2 id="2-1-创建目标接口及其实现类"><a href="#2-1-创建目标接口及其实现类" class="headerlink" title="2.1 创建目标接口及其实现类"></a>2.1 创建目标接口及其实现类</h2><p>JDK动态代理是基于接口的, 我们创建一个<strong>接口及其实现类</strong></p>
+<p>Foo接口:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line"></span><br><span class="line">    String <span class="title function_">ping</span><span class="params">(String name)</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Foo接口的实现类RealFoo:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RealFoo</span> <span class="keyword">implements</span> <span class="title class_">Foo</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">ping</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;ping&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;pong&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-2-创建一个InvocationHandler"><a href="#2-2-创建一个InvocationHandler" class="headerlink" title="2.2 创建一个InvocationHandler"></a>2.2 创建一个InvocationHandler</h2><p>创建一个<code>InvocationHandler</code>接口的实现类, <code>MyInvocationHandler</code></p>
+<p>该类的够着方法参数为要代理的目标对象</p>
+<p><code>invoke</code>方法中的三个参数上面已经介绍过, 通过调用<code>method</code>的<code>invoke</code>方法来完成方法的调用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyInvocationHandler</span> <span class="keyword">implements</span> <span class="title class_">InvocationHandler</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 目标对象</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Object target;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MyInvocationHandler</span><span class="params">(Object target)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.target = target;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Object <span class="title function_">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;proxy - &quot;</span> + proxy.getClass());</span><br><span class="line">        System.out.println(<span class="string">&quot;method - &quot;</span> + method);</span><br><span class="line">        System.out.println(<span class="string">&quot;args - &quot;</span> + Arrays.toString(args));</span><br><span class="line">        <span class="keyword">return</span> method.invoke(target, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-3-方式一-通过getProxyClass方法获取代理实例"><a href="#2-3-方式一-通过getProxyClass方法获取代理实例" class="headerlink" title="2.3 方式一: 通过getProxyClass方法获取代理实例"></a>2.3 方式一: 通过getProxyClass方法获取代理实例</h2><p>具体实现步骤如下:</p>
+<ol>
+<li>通过类加载器和接口数组获取代理类的Class对象</li>
+<li>对Class对象的构造器创建一个实例(代理类的实例)</li>
+<li>将代理实例强转为目标接口Foo(因为代理类实现了目标接口, 所以可以强转)</li>
+<li>最后使用代理进行方法调用</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test1</span><span class="params">()</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">    <span class="type">Foo</span> <span class="variable">foo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">RealFoo</span>();</span><br><span class="line">    <span class="comment">// 根据类加载器和接口数组获取代理类的Class对象</span></span><br><span class="line">    Class&lt;?&gt; proxyClass = Proxy.getProxyClass(Foo.class.getClassLoader(), Foo.class);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 通过Class对象的构造器创建一个实例（代理类的实例）</span></span><br><span class="line">    <span class="type">Foo</span> <span class="variable">fooProxy</span> <span class="operator">=</span> (Foo) proxyClass.getConstructor(InvocationHandler.class)</span><br><span class="line">        .newInstance(<span class="keyword">new</span> <span class="title class_">MyInvocationHandler</span>(foo));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 调用 ping 方法，并输出返回值</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">value</span> <span class="operator">=</span> fooProxy.ping(<span class="string">&quot;杨过&quot;</span>);</span><br><span class="line">    System.out.println(value);</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>输出结果:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">proxy - <span class="keyword">class</span> <span class="title class_">com</span>.sun.proxy.$Proxy4</span><br><span class="line">method - <span class="keyword">public</span> <span class="keyword">abstract</span> java.lang.String io.github.gozhuyinglong.proxy.Foo.ping(java.lang.String)</span><br><span class="line">args - [杨过]</span><br><span class="line">ping</span><br><span class="line">pong</span><br></pre></td></tr></table></figure>
+
+<p>通过输出的结果, 可以看出:</p>
+<ul>
+<li>代理类的名称是以<code>$Proxy</code>开头的</li>
+<li>方法实例为代理类调用的方法</li>
+<li>参数为代理类调用方法时传的参数</li>
+</ul>
+<h2 id="2-4-方式二-通过newProxyInstance方法获取代理实例"><a href="#2-4-方式二-通过newProxyInstance方法获取代理实例" class="headerlink" title="2.4 方式二: 通过newProxyInstance方法获取代理实例"></a>2.4 方式二: 通过newProxyInstance方法获取代理实例</h2><p>通过这种方式是最简单, 也是推荐使用的, 通过该方法可以直接获取代理对象</p>
+<p>注: 其实改方法后台实现实际与上面使用getProxyClass方法的过程一样</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test2</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">Foo</span> <span class="variable">foo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">RealFoo</span>();</span><br><span class="line">    <span class="comment">// 通过类加载器、接口数组和调用处理器，创建代理类的实例</span></span><br><span class="line">    <span class="type">Foo</span> <span class="variable">fooProxy</span> <span class="operator">=</span> (Foo) Proxy.newProxyInstance(Foo.class.getClassLoader(),</span><br><span class="line">                                                <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;Foo.class&#125;,</span><br><span class="line">                                                <span class="keyword">new</span> <span class="title class_">MyInvocationHandler</span>(foo));</span><br><span class="line">    <span class="type">String</span> <span class="variable">value</span> <span class="operator">=</span> fooProxy.ping(<span class="string">&quot;小龙女&quot;</span>);</span><br><span class="line">    System.out.println(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-5-通过Lambda表达式简化实现"><a href="#2-5-通过Lambda表达式简化实现" class="headerlink" title="2.5 通过Lambda表达式简化实现"></a>2.5 通过Lambda表达式简化实现</h2><p>其实<code>Invocationhander</code>接口也不用创建一个实现类, 可以使用Lambda表达式进行简化实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test3</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">Foo</span> <span class="variable">foo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">RealFoo</span>();</span><br><span class="line"></span><br><span class="line">    <span class="type">Foo</span> <span class="variable">fooProxy</span> <span class="operator">=</span> (Foo) Proxy.newProxyInstance(Foo.class.getClassLoader(),</span><br><span class="line">                                                <span class="keyword">new</span> <span class="title class_">Class</span>[]&#123;Foo.class&#125;,</span><br><span class="line">                                                (proxy, method, args) -&gt; method.invoke(foo, args));</span><br><span class="line">    <span class="type">String</span> <span class="variable">value</span> <span class="operator">=</span> fooProxy.ping(<span class="string">&quot;雕兄&quot;</span>);</span><br><span class="line">    System.out.println(value);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+            <!--[if lt IE 9]><script>document.createElement('audio');</script><![endif]-->
+            <audio id="audio" loop="1" preload="auto" controls="controls" data-autoplay="false">
+                <source type="audio/mpeg" src="">
+            </audio>
+            
+                <ul id="audio-list" style="display:none">
+                    
+                        
+                            <li title="0" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                        
+                            <li title="1" data-url="http://link.hhtjim.com/163/425570952.mp3"></li>
+                        
+                    
+                </ul>
+            
+        </div>
+        
+    <div id="gitalk-container" class="comment link"
+		data-enable="false"
+        data-ae="false"
+        data-ci=""
+        data-cs=""
+        data-r=""
+        data-o=""
+        data-a=""
+        data-d="false"
+    >查看评论</div>
+
+
+    </div>
+    
+</div>
+
+
+    </div>
+</div>
+</body>
+
+
+<script src="//lib.baomitu.com/jquery/1.8.3/jquery.min.js"></script>
+<script src="/js/plugin.js"></script>
+<script src="/js/typed.js"></script>
+<script src="/js/diaspora.js"></script>
+
+
+<link rel="stylesheet" href="/photoswipe/photoswipe.css">
+<link rel="stylesheet" href="/photoswipe/default-skin/default-skin.css">
+
+
+<script src="/photoswipe/photoswipe.min.js"></script>
+<script src="/photoswipe/photoswipe-ui-default.min.js"></script>
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                      <div class="pswp__preloader__cut">
+                        <div class="pswp__preloader__donut"></div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div> 
+            </div>
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+</html>
